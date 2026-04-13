@@ -1,0 +1,34 @@
+const express = require('express');
+const EventRoutes = express.Router();
+const { verifyToken, checkRole } = require('../middleware/authMiddleware');
+
+// Import controllers
+const createEvent = require('../event_controllers/createEvent');
+const getAllEvents = require('../event_controllers/getAllEvents');
+const getEventById = require('../event_controllers/getEventById');
+const updateEvent = require('../event_controllers/updateEvent');
+const deleteEvent = require('../event_controllers/deleteEvent');
+const registerForEvent = require('../event_controllers/registerForEvent');
+const unregisterFromEvent = require('../event_controllers/unregisterFromEvent');
+const getEventRegistrations = require('../event_controllers/getEventRegistrations');
+const updateEventStatus = require('../event_controllers/updateEventStatus');
+const markAttendance = require('../event_controllers/markAttendance');
+
+
+// Public Routes (Accessible by everyone)
+EventRoutes.get('/', getAllEvents);
+EventRoutes.get('/:id', getEventById);
+
+// Protected Routes (Accessible only by Organizers and Admins)
+EventRoutes.post('/', verifyToken, checkRole(['organizer', 'admin']), createEvent);
+EventRoutes.put('/:id', verifyToken, checkRole(['organizer', 'admin']), updateEvent);
+EventRoutes.patch('/:id', verifyToken, checkRole(['admin']), updateEventStatus);
+EventRoutes.delete('/:id', verifyToken, checkRole(['organizer', 'admin']), deleteEvent);
+
+// User registration routes
+EventRoutes.post('/:id/register', verifyToken, registerForEvent);
+EventRoutes.delete('/:id/register', verifyToken, unregisterFromEvent);
+EventRoutes.get('/:id/registrations', verifyToken, checkRole(['organizer', 'admin']), getEventRegistrations);
+EventRoutes.post('/:id/attendance', verifyToken, checkRole(['organizer', 'admin']), markAttendance);
+
+module.exports = EventRoutes;

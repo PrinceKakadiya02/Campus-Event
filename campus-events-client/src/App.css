@@ -1,0 +1,274 @@
+/* General Responsive Styles */
+.container {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Responsive Grid for Events, Registrations etc. */
+.event-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+    /* Mobile-first: single column */
+}
+
+@media (min-width: 600px) {
+    .event-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    .event-grid {
+        /* This is the original responsive style, which is great for larger screens */
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+
+/* --- Navbar Styles --- */
+.header {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #4e73df;
+    text-decoration: none;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+}
+
+.nav-list {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 25px;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #5a5c69;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #4e73df;
+}
+
+.nav-link.btn {
+    padding: 8px 20px;
+    border-radius: 5px;
+    background-color: #4e73df;
+    color: white;
+}
+
+.nav-link.btn:hover {
+    background-color: #2e59d9;
+    color: white;
+}
+
+.btn-logout {
+    padding: 8px 20px;
+    border-radius: 5px;
+    background-color: #e74a3b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 500;
+}
+
+.btn-logout:hover {
+    background-color: #c73e2e;
+}
+
+
+/* Hamburger Menu */
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+.bar {
+    display: block;
+    width: 25px;
+    height: 3px;
+    margin: 5px auto;
+    -webkit-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    background-color: #333;
+}
+
+/* Responsive Navbar - Mobile View */
+@media (max-width: 768px) {
+    .nav-overlay {
+        position: fixed;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        height: calc(100vh - 70px);
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(3px);
+        z-index: 999;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .nav-overlay.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .hamburger {
+        display: block;
+        z-index: 1001;
+        /* Ensure it's above the nav menu */
+    }
+
+    .hamburger.active .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger.active .bar:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .hamburger.active .bar:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+
+    .nav-menu {
+        position: fixed;
+        left: -100%;
+        top: 70px;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 1.5rem;
+        background-color: #f8f9fa;
+        width: 75%;
+        max-width: 320px;
+        height: calc(100vh - 70px);
+        text-align: left;
+        transition: left 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        z-index: 1000;
+        box-shadow: 5px 0 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-menu.active {
+        left: 0;
+    }
+
+    .nav-list {
+        flex-direction: column;
+        width: 100%;
+        gap: 0;
+        padding: 0 1.5rem;
+    }
+
+    .nav-item {
+        width: 100%;
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    .nav-menu.active .nav-item {
+        animation: fadeSlideIn 0.4s forwards;
+    }
+
+    .nav-menu.active .nav-item:nth-child(1) {
+        animation-delay: 0.1s;
+    }
+
+    .nav-menu.active .nav-item:nth-child(2) {
+        animation-delay: 0.15s;
+    }
+
+    .nav-menu.active .nav-item:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+
+    .nav-menu.active .nav-item:nth-child(4) {
+        animation-delay: 0.25s;
+    }
+
+    .nav-menu.active .nav-item:nth-child(5) {
+        animation-delay: 0.3s;
+    }
+
+    .nav-menu.active .nav-item:nth-child(6) {
+        animation-delay: 0.35s;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 1.2rem 0;
+        width: 100%;
+        font-size: 1.15rem;
+        border-bottom: 1px solid #eaecf4;
+    }
+
+    .nav-link.btn {
+        text-align: center;
+        margin-top: 1.5rem;
+        border-bottom: none;
+    }
+
+    .btn-logout {
+        width: 100%;
+        margin-top: 1.5rem;
+        padding: 12px;
+        font-size: 1.1rem;
+    }
+}
+
+@keyframes fadeSlideIn {
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* --- Other Responsive Fixes --- */
+
+/* Fix for Profile page header on small screens */
+.profile-header-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+    .profile-header-content {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Fix for Admin page stat cards */
+.overview-section .event-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}

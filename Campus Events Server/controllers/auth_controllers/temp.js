@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { user: User } = require('../models');
+const { user: User } = require('../../models');
 
 (async () => {
     try {

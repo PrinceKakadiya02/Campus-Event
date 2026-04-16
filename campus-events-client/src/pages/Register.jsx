@@ -134,7 +134,7 @@ const Register = () => {
         e.preventDefault();
 
         if (!isOtpVerified) {
-            setError('Please verify your email with OTP first.');
+            handleVerifyOtp();
             return;
         }
 
@@ -152,6 +152,7 @@ const Register = () => {
         setError('');
 
         const payload = {
+            username: formData.name,
             full_name: formData.name,
             email: formData.email,
             password: formData.password,
@@ -222,41 +223,41 @@ const Register = () => {
 
                 {isOtpVerified && (
                     <div id="detailsSection">
-                    <label htmlFor="password">Password:</label>
+                        <label htmlFor="password">Password:</label>
                         <input type="password" id="password" ref={passwordRef} value={formData.password} onChange={handleChange} required />
 
-                    <label htmlFor="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+                        <label htmlFor="confirmPassword">Confirm Password:</label>
+                        <input type="password" id="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
 
-                    <label htmlFor="phone">Phone No:</label>
-                    <input type="tel" id="phone" value={formData.phone} onChange={handleChange} required />
+                        <label htmlFor="phone">Phone No:</label>
+                        <input type="tel" id="phone" value={formData.phone} onChange={handleChange} required />
 
-                    <label htmlFor="department">Department:</label>
-                    <select id="department" value={formData.department} onChange={handleChange} required>
-                        <option value="IT">Information Technology</option>
-                        <option value="CE">Computer Engineering</option>
-                        <option value="EE">Electrical Engineering</option>
-                        <option value="ME">Mechanical Engineering</option>
-                        <option value="CIV">Civil Engineering</option>
-                    </select>
+                        <label htmlFor="department">Department:</label>
+                        <select id="department" value={formData.department} onChange={handleChange} required>
+                            <option value="IT">Information Technology</option>
+                            <option value="CE">Computer Engineering</option>
+                            <option value="EE">Electrical Engineering</option>
+                            <option value="ME">Mechanical Engineering</option>
+                            <option value="CIV">Civil Engineering</option>
+                        </select>
 
-                    {formData.role === 'student' && (
-                        <div id="student-fields">
-                            <label htmlFor="year">Year:</label>
-                            <select id="year" value={formData.year} onChange={handleChange}>
-                                <option value="FY">First Year</option>
-                                <option value="SY">Second Year</option>
-                                <option value="TY">Third Year</option>
-                                <option value="LY">Fourth Year</option>
-                            </select>
+                        {formData.role === 'student' && (
+                            <div id="student-fields">
+                                <label htmlFor="year">Year:</label>
+                                <select id="year" value={formData.year} onChange={handleChange}>
+                                    <option value="FY">First Year</option>
+                                    <option value="SY">Second Year</option>
+                                    <option value="TY">Third Year</option>
+                                    <option value="LY">Fourth Year</option>
+                                </select>
 
-                            <label htmlFor="enrollmentNo">Enrollment No:</label>
-                            <input type="number" id="enrollmentNo" value={formData.enrollmentNo} onChange={handleChange} required />
-                        </div>
-                    )}
+                                <label htmlFor="enrollmentNo">Enrollment No:</label>
+                                <input type="number" id="enrollmentNo" value={formData.enrollmentNo} onChange={handleChange} required />
+                            </div>
+                        )}
 
-                    <button type="submit" className="btn" disabled={isSubmitting} style={{ width: '100%' }}>Sign Up</button>
-                </div>
+                        <button type="submit" className="btn" disabled={isSubmitting} style={{ width: '100%' }}>Sign Up</button>
+                    </div>
                 )}
 
                 <div className="auth-switch" style={{ marginTop: '15px' }}>

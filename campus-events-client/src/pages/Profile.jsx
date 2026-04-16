@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { API_BASE_URL } from '../config';
@@ -37,7 +37,10 @@ const Profile = () => {
         if (user.role === 'student') {
             fetch(`${API_BASE_URL}/user/registrations`, { credentials: 'include' })
                 .then(res => {
-                    if (res.status === 401) navigate('/login');
+                    if (res.status === 401) {
+                        navigate('/login');
+                        throw new Error('Unauthorized');
+                    }
                     return res.json();
                 })
                 .then(data => setRegistrations(Array.isArray(data) ? data : []))
@@ -55,12 +58,18 @@ const Profile = () => {
         e.preventDefault();
         setUpdateMessage({ type: '', text: '' });
 
+        const payload = {
+            ...editData,
+            academic_year: editData.academic_year || null,
+            enrollment_no: editData.enrollment_no ? Number(editData.enrollment_no) : null
+        };
+
         try {
             const response = await fetch(`${API_BASE_URL}/user/profile`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
-                body: JSON.stringify(editData)
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
@@ -70,7 +79,15 @@ const Profile = () => {
                 setIsEditing(false);
                 // Update global user context state with the latest data
                 if (login) {
-                    login({ ...user, name: data.user.full_name, full_name: data.user.full_name, phone_number: data.user.phone_number, department: data.user.department, academic_year: data.user.academic_year, enrollment_no: data.user.enrollment_no });
+                    login({
+                        ...user,
+                        name: data.user?.full_name || editData.full_name,
+                        full_name: data.user?.full_name || editData.full_name,
+                        phone_number: data.user?.phone_number || editData.phone_number,
+                        department: data.user?.department || editData.department,
+                        academic_year: data.user?.academic_year || editData.academic_year,
+                        enrollment_no: data.user?.enrollment_no || editData.enrollment_no
+                    });
                 }
             } else if (response.status === 404) {
                 setUpdateMessage({ type: 'error', text: data.message || "User not found." });
@@ -85,26 +102,30 @@ const Profile = () => {
         }
     };
 
-    const now = new Date();
-    now.setHours(0, 0, 0, 0); // Ignore time to only compare calendar days
+    const { upcomingRegistrations, pastRegistrations } = useMemo(() => {
+        const now = new Date();
+        now.setHours(0, 0, 0, 0); // Ignore time to only compare calendar days
 
-    const upcomingRegistrations = registrations.filter(reg => {
-        const event = reg.event || reg;
-        if (String(event.id) === '409') return true; // Always show testing event in upcoming
-        const eventDateStr = event.date || event.event_date;
-        if (!eventDateStr) return true; // Show events with no date in upcoming by default
-        const eventDate = new Date(eventDateStr);
-        return isNaN(eventDate) || eventDate >= now;
-    });
+        const upcoming = registrations.filter(reg => {
+            const event = reg.event || reg;
+            if (String(event.id) === '409') return true;
+            const eventDateStr = event.date || event.event_date;
+            if (!eventDateStr) return true;
+            const eventDate = new Date(eventDateStr);
+            return isNaN(eventDate.getTime()) || eventDate >= now;
+        });
 
-    const pastRegistrations = registrations.filter(reg => {
-        const event = reg.event || reg;
-        if (String(event.id) === '409') return false; // Prevent testing event from moving to past
-        const eventDateStr = event.date || event.event_date;
-        if (!eventDateStr) return false;
-        const eventDate = new Date(eventDateStr);
-        return !isNaN(eventDate) && eventDate < now;
-    });
+        const past = registrations.filter(reg => {
+            const event = reg.event || reg;
+            if (String(event.id) === '409') return false;
+            const eventDateStr = event.date || event.event_date;
+            if (!eventDateStr) return false;
+            const eventDate = new Date(eventDateStr);
+            return !isNaN(eventDate.getTime()) && eventDate < now;
+        });
+
+        return { upcomingRegistrations: upcoming, pastRegistrations: past };
+    }, [registrations]);
 
     const visibleUpcoming = showAllUpcoming ? upcomingRegistrations : upcomingRegistrations.slice(0, 4);
     const visiblePast = showAllPast ? pastRegistrations : pastRegistrations.slice(0, 4);
@@ -338,7 +359,7 @@ const Profile = () => {
                     </p>
                 </div>
             )}
-            
+
             {activeTicketEventId && (
                 <div className="loader-overlay" onClick={() => setActiveTicketEventId(null)}>
                     <div onClick={e => e.stopPropagation()} style={{ background: '#fff', padding: '20px', borderRadius: '10px', position: 'relative', width: '90%', maxWidth: '400px', boxShadow: 'var(--shadow-md)' }}>

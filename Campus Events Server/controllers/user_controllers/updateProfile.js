@@ -1,4 +1,4 @@
-const db = require('../models');
+const db = require('../../models');
 const User = db.user; // Assuming sequelize-auto singularized 'users' to 'user'
 
 const updateProfile = async (req, res) => {

@@ -3,16 +3,16 @@ const EventRoutes = express.Router();
 const { verifyToken, checkRole } = require('../middleware/authMiddleware');
 
 // Import controllers
-const createEvent = require('../event_controllers/createEvent');
-const getAllEvents = require('../event_controllers/getAllEvents');
-const getEventById = require('../event_controllers/getEventById');
-const updateEvent = require('../event_controllers/updateEvent');
-const deleteEvent = require('../event_controllers/deleteEvent');
-const registerForEvent = require('../event_controllers/registerForEvent');
-const unregisterFromEvent = require('../event_controllers/unregisterFromEvent');
-const getEventRegistrations = require('../event_controllers/getEventRegistrations');
-const updateEventStatus = require('../event_controllers/updateEventStatus');
-const markAttendance = require('../event_controllers/markAttendance');
+const createEvent = require('../controllers/event_controllers/createEvent');
+const getAllEvents = require('../controllers/event_controllers/getAllEvents');
+const getEventById = require('../controllers/event_controllers/getEventById');
+const updateEvent = require('../controllers/event_controllers/updateEvent');
+const deleteEvent = require('../controllers/event_controllers/deleteEvent');
+const registerForEvent = require('../controllers/event_controllers/registerForEvent');
+const unregisterFromEvent = require('../controllers/event_controllers/unregisterFromEvent');
+const getEventRegistrations = require('../controllers/event_controllers/getEventRegistrations');
+const updateEventStatus = require('../controllers/event_controllers/updateEventStatus');
+const markAttendance = require('../controllers/event_controllers/markAttendance');
 
 
 // Public Routes (Accessible by everyone)

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const { user: User, otpVerification } = require('../models');
-const { sendOtpEmail } = require('../middleware/EmailTemplate');
+const { user: User, otpVerification } = require('../../models');
+const { sendOtpEmail } = require('../../middleware/EmailTemplate');
 
 const forgotPassword = async (req, res) => {
     try {
@@ -42,7 +42,7 @@ const forgotPassword = async (req, res) => {
             });
         }
 
-        sendOtpEmail(email, user.full_name, otp);
+        await sendOtpEmail(email, user.full_name, otp);
         return res.status(200).json({ success: true, message: "OTP sent to your email" });
 
     } catch (err) {

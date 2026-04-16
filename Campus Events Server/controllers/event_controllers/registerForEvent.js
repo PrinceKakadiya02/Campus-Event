@@ -1,4 +1,4 @@
-const { event: Event, userRegistration: UserRegistration } = require('../models');
+const { event: Event, userRegistration: UserRegistration } = require('../../models');
 
 const registerForEvent = async (req, res) => {
     try {

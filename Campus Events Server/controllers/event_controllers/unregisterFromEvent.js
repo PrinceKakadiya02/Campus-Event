@@ -1,4 +1,4 @@
-const { userRegistration: UserRegistration } = require('../models');
+const { userRegistration: UserRegistration } = require('../../models');
 
 const unregisterFromEvent = async (req, res) => {
     try {

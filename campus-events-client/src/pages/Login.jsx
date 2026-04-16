@@ -244,6 +244,11 @@ const Login = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
 
+        if (!isSignupOtpVerified) {
+            handleVerifySignupOtp();
+            return;
+        }
+
         if (!signupPassword || !signupConfirmPassword || !signupPhone) {
             setError("Please fill in all required fields.");
             return;
@@ -329,14 +334,14 @@ const Login = () => {
                     <input type="password" id="loginPassword" required value={password} onChange={(e) => setPassword(e.target.value)} />
 
                     <div style={{ textAlign: 'right', marginBottom: '15px' }}>
-                        <a href="#" onClick={(e) => { e.preventDefault(); setView('forgot'); setError(''); }} style={{ fontSize: '0.9rem', color: '#4e73df' }}>
+                        <button type="button" onClick={() => { setView('forgot'); setError(''); }} style={{ background: 'none', border: 'none', padding: 0, fontSize: '0.9rem', color: '#4e73df', cursor: 'pointer', textDecoration: 'underline' }}>
                             Forgot Password?
-                        </a>
+                        </button>
                     </div>
 
                     <button type="submit" className="btn" disabled={loading} style={{ width: '100%' }}>Login</button>
                     <div className="auth-switch">
-                        <p>Don't have an account? <a href="#" onClick={(e) => { e.preventDefault(); setView('signup'); setError(''); }}>Register here</a></p>
+                        <p>Don't have an account? <button type="button" onClick={() => { setView('signup'); setError(''); }} style={{ background: 'none', border: 'none', padding: 0, fontSize: '0.9rem', color: '#4e73df', cursor: 'pointer', textDecoration: 'underline' }}>Register here</button></p>
                     </div>
                 </form>
             )}
@@ -347,7 +352,7 @@ const Login = () => {
                     <input type="email" id="forgotEmail" required value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} />
                     <button type="submit" className="btn" disabled={loading} style={{ width: '100%' }}>Send Reset OTP</button>
                     <div className="auth-switch" style={{ marginTop: '15px' }}>
-                        <a href="#" onClick={(e) => { e.preventDefault(); setView('login'); setError(''); }}>Back to Login</a>
+                        <button type="button" onClick={() => { setView('login'); setError(''); }} style={{ background: 'none', border: 'none', padding: 0, fontSize: '0.9rem', color: '#4e73df', cursor: 'pointer', textDecoration: 'underline' }}>Back to Login</button>
                     </div>
                 </form>
             )}
@@ -390,7 +395,7 @@ const Login = () => {
                     )}
 
                     <div className="auth-switch" style={{ marginTop: '15px' }}>
-                        <a href="#" onClick={(e) => { e.preventDefault(); setView('login'); setError(''); }}>Back to Login</a>
+                        <button type="button" onClick={() => { setView('login'); setError(''); }} style={{ background: 'none', border: 'none', padding: 0, fontSize: '0.9rem', color: '#4e73df', cursor: 'pointer', textDecoration: 'underline' }}>Back to Login</button>
                     </div>
                 </form>
             )}
@@ -465,7 +470,7 @@ const Login = () => {
                         </div>
                     )}
                     <div className="auth-switch" style={{ marginTop: '15px' }}>
-                        <p>Already have an account? <a href="#" onClick={(e) => { e.preventDefault(); setView('login'); setError(''); }}>Login</a></p>
+                        <p>Already have an account? <button type="button" onClick={() => { setView('login'); setError(''); }} style={{ background: 'none', border: 'none', padding: 0, fontSize: '0.9rem', color: '#4e73df', cursor: 'pointer', textDecoration: 'underline' }}>Login</button></p>
                     </div>
                 </form>
             )}

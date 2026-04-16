@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt');
-const { user: User, otpVerification } = require('../models');
-
+const { user: User, otpVerification } = require('../../models');
 const verifyOtp = async (req, res) => {
     try {
         const { email, otp } = req.body;
@@ -21,7 +20,7 @@ const verifyOtp = async (req, res) => {
         if (otpEntry.is_verified === true) {
             return res.status(400).json({
                 success: false,
-                message: "User already registered"
+                message: "OTP is already verified"
             });
         }
 

@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { userRegistration: UserRegistration, event: Event } = require('../models');
+const { userRegistration: UserRegistration, event: Event } = require('../../models');
 
 const markAttendance = async (req, res) => {
     try {

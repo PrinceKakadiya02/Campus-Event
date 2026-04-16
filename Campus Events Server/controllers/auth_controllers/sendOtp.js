@@ -1,17 +1,16 @@
 const bcrypt = require('bcrypt');
-const { user: User, otpVerification } = require('../models');
-const { sendOtpEmail } = require('../middleware/EmailTemplate');
+const { user: User, otpVerification } = require('../../models');
+const { sendOtpEmail } = require('../../middleware/EmailTemplate');
+const { sendOtpValidation } = require('../../validation/auth');
 
 const sendOtp = async (req, res) => {
     try {
-        // res.send("Hello from backend")
-        const { name, email, role } = req.body;
-        if (!name || !email || !role) { // This check is now valid with the frontend change
-            return res.status(400).json({
-                success: false,
-                message: "Name, email, and role are required to send an OTP."
-            });
+        const { error } = sendOtpValidation.validate(req.body);
+        if (error) {
+            return res.status(400).json({ success: false, message: error.details[0].message });
         }
+
+        const { name, email, role } = req.body;
 
         // check if user already registered
         const existingUser = await User.findOne({ where: { email } });
@@ -43,7 +42,7 @@ const sendOtp = async (req, res) => {
             existingOtpEntry.is_verified = false;
             await existingOtpEntry.save();
 
-            sendOtpEmail(email, name, otp);
+            await sendOtpEmail(email, name, otp);
             return res.status(200).json({ success: true, message: "A new OTP has been sent to your email." });
 
         } else {
@@ -57,7 +56,7 @@ const sendOtp = async (req, res) => {
                 otp_hash: otpHash,
                 otp_expires_at: new Date(Date.now() + 60 * 1000) // Expires in 1 minute
             });
-            sendOtpEmail(email, name, otp);
+            await sendOtpEmail(email, name, otp);
             return res.status(200).json({ success: true, message: "OTP sent to your email" });
         }
 

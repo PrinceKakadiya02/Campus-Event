@@ -88,32 +88,32 @@ const emailTemplate = (title, content) => `
    1️⃣ OTP EMAIL
 ================================ */
 const sendOtpEmail = async (to, name, otp) => {
-    const html = emailTemplate(
-        "OTP Verification",
-        `
+  const html = emailTemplate(
+    "OTP Verification",
+    `
       <p>Hello <b>${name}</b>,</p>
       <p>Use the OTP below to verify your Campus Events account:</p>
       <div class="otp">${otp}</div>
       <p>This OTP is valid for <b>1 minutes</b>.</p>
       <p>If you did not request this, please ignore this email.</p>
     `
-    );
+  );
 
-    await transporter.sendMail({
-        from: '"Campus Events" <princekakadiya207@gmail.com>',
-        to,
-        subject: "Your OTP for Campus Events Verification",
-        html,
-    });
+  await transporter.sendMail({
+    from: `"Campus Events" <${process.env.SMTP_USER}>`,
+    to,
+    subject: "Your OTP for Campus Events Verification",
+    html,
+  });
 };
 
 /* ===============================
    2️⃣ WELCOME EMAIL
 ================================ */
 const sendWelcomeEmail = async (to, name) => {
-    const html = emailTemplate(
-        "Welcome to Campus Events",
-        `
+  const html = emailTemplate(
+    "Welcome to Campus Events",
+    `
       <p>Hello <b>${name}</b>,</p>
       <p>🎉 Your account has been successfully created!</p>
       <p>You can now:</p>
@@ -124,30 +124,30 @@ const sendWelcomeEmail = async (to, name) => {
       </ul>
       <p>We’re excited to have you onboard 🚀</p>
     `
-    );
+  );
 
-    await transporter.sendMail({
-        from: '"Campus Events" <princekakadiya207@gmail.com>',
-        to,
-        subject: "Welcome to Campus Events 🎉",
-        html,
-    });
+  await transporter.sendMail({
+    from: `"Campus Events" <${process.env.SMTP_USER}>`,
+    to,
+    subject: "Welcome to Campus Events 🎉",
+    html,
+  });
 };
 
 /* ===============================
    3️⃣ EVENT REGISTRATION EMAIL
 ================================ */
 const sendEventRegistrationEmail = async (
-    to,
-    name,
-    eventName,
-    venue,
-    date,
-    time
+  to,
+  name,
+  eventName,
+  venue,
+  date,
+  time
 ) => {
-    const html = emailTemplate(
-        "Event Registration Successful",
-        `
+  const html = emailTemplate(
+    "Event Registration Successful",
+    `
       <p>Hello <b>${name}</b>,</p>
       <p>You have successfully registered for:</p>
 
@@ -161,30 +161,30 @@ const sendEventRegistrationEmail = async (
       <p>Please arrive on time and carry your college ID.</p>
       <p>See you there 🎊</p>
     `
-    );
+  );
 
-    await transporter.sendMail({
-        from: '"Campus Events" <princekakadiya207@gmail.com>',
-        to,
-        subject: "Event Registration Confirmed 🎟️",
-        html,
-    });
+  await transporter.sendMail({
+    from: `"Campus Events" <${process.env.SMTP_USER}>`,
+    to,
+    subject: "Event Registration Confirmed 🎟️",
+    html,
+  });
 };
 
 /* ===============================
    4️⃣ EVENT REMINDER EMAIL
 ================================ */
 const sendEventReminderEmail = async (
-    to,
-    name,
-    eventName,
-    venue,
-    date,
-    time
+  to,
+  name,
+  eventName,
+  venue,
+  date,
+  time
 ) => {
-    const html = emailTemplate(
-        "Event Reminder",
-        `
+  const html = emailTemplate(
+    "Event Reminder",
+    `
       <p>Hello <b>${name}</b>,</p>
       <p>⏰ This is a reminder for your upcoming event:</p>
 
@@ -197,22 +197,22 @@ const sendEventReminderEmail = async (
 
       <p>We’re excited to see you there!</p>
     `
-    );
+  );
 
-    await transporter.sendMail({
-        from: '"Campus Events" <princekakadiya207@gmail.com>',
-        to,
-        subject: `Reminder: ${eventName} is Today!`,
-        html,
-    });
+  await transporter.sendMail({
+    from: `"Campus Events" <${process.env.SMTP_USER}>`,
+    to,
+    subject: `Reminder: ${eventName} is Today!`,
+    html,
+  });
 };
 
 /* ===============================
    EXPORTS
 ================================ */
 module.exports = {
-    sendOtpEmail,
-    sendWelcomeEmail,
-    sendEventRegistrationEmail,
-    sendEventReminderEmail,
+  sendOtpEmail,
+  sendWelcomeEmail,
+  sendEventRegistrationEmail,
+  sendEventReminderEmail,
 };

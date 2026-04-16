@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { userRegistration: UserRegistration } = require('../models');
+const { userRegistration: UserRegistration } = require('../../models');
 
 const getQrToken = async (req, res) => {
     try {

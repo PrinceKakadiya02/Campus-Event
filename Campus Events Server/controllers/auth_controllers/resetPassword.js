@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const { user: User, otpVerification } = require('../models');
+const { user: User, otpVerification } = require('../../models');
 
 const resetPassword = async (req, res) => {
     try {

@@ -1,16 +1,19 @@
-const { user: User } = require('../models');
+const { user: User } = require('../../models');
 const bcrypt = require('bcrypt');
+const { registerValidation } = require('../../validation/auth');
+const { sendWelcomeEmail } = require('../../middleware/EmailTemplate');
 
 const register = async (req, res) => {
     try {
+        const { error } = registerValidation.validate(req.body);
+        if (error) {
+            return res.status(400).json({ success: false, message: error.details[0].message });
+        }
+
         let { username, full_name, email, password, role, phone_number, department, academic_year, enrollment_no } = req.body;
 
         // Map username to full_name if full_name is missing
         if (!full_name && username) full_name = username;
-
-        if (!full_name || !email || !password || !phone_number || !department || !role) {
-            return res.status(400).json({ success: false, message: "Please provide full name, email, password, role, phone number, and department." });
-        }
 
         // Trim whitespace
         email = email.trim();
@@ -38,6 +41,9 @@ const register = async (req, res) => {
             academic_year,
             enrollment_no
         });
+
+        // Send a welcome email asynchronously
+        await sendWelcomeEmail(newUser.email, newUser.full_name);
 
         const userResponse = { ...newUser.get({ plain: true }) };
         delete userResponse.password;

@@ -1,4 +1,4 @@
-const { event: Event } = require('../models');
+const { event: Event } = require('../../models');
 
 const updateEvent = async (req, res) => {
     try {

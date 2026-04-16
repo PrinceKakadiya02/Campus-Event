@@ -12,6 +12,7 @@ const registerValidation = Joi.object({
             'string.max': 'Full name should have a maximum length of {#limit}',
             'any.required': 'Full name is a required field'
         }),
+    username: Joi.string().optional().allow(null, ''),
     email: Joi.string()
         .email()
         .required()
@@ -50,25 +51,19 @@ const registerValidation = Joi.object({
             'any.only': 'Academic year must be one of FY, SY, TY, LY',
             'any.required': 'Academic year is required'
         }),
-    enrollment_no: Joi.string()
-        .max(50)
+    enrollment_no: Joi.any()
         .when('role', { is: 'student', then: Joi.required(), otherwise: Joi.optional() })
         .messages({
             'any.required': 'Enrollment number is required'
         }),
     role: Joi.string()
         .valid('student', 'organizer')
-        .required(),
-    otp: Joi.string()
-        .length(6)
         .required()
-        .messages({
-            'string.length': 'OTP must be 6 digits',
-            'any.required': 'OTP is required'
-        })
 });
 
 const sendOtpValidation = Joi.object({
+    name: Joi.string().required(),
+    role: Joi.string().valid('student', 'organizer', 'admin').required(),
     email: Joi.string()
         .email()
         .required()

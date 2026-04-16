@@ -1,9 +1,9 @@
 const { transporter } = require('./EmailConfig')
 
-const SendEmailVerification = async(email, otp) => {
+const SendEmailVerification = async (email, otp) => {
     try {
-        const response = await transporter.sendMail({
-            from: '"Campus Events" <princekakadiya207@gmail.com>',
+        await transporter.sendMail({
+            from: `"Campus Events" <${process.env.SMTP_USER}>`,
             to: email,
             subject: "Verify Your Email",
             text: "Verify Your Email", // Plain-text version of the message

@@ -33,7 +33,8 @@ const UserEventTicket = ({ eventId }) => {
                     setError(data.message || 'Failed to load ticket.');
                 }
             } catch (err) {
-                setError('Connection error while fetching ticket.', err);
+                console.error('Connection error while fetching ticket.', err);
+                setError('Connection error while fetching ticket.');
             } finally {
                 setLoading(false);
             }

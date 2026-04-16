@@ -5,6 +5,7 @@ import Loader from '../components/Loader';
 import { useNotification } from '../context/NotificationContext';
 import { API_BASE_URL } from '../config';
 import OrganizerScanner from '../components/OrganizerScanner';
+import EventAttendees from '../components/EventAttendees';
 
 const Dashboard = () => {
     const { user } = useAuth();
@@ -14,6 +15,7 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(false);
     const [showAllMyEvents, setShowAllMyEvents] = useState(false);
     const [scanningEventId, setScanningEventId] = useState(null);
+    const [viewingAttendeesEventId, setViewingAttendeesEventId] = useState(null);
 
     const [formData, setFormData] = useState({
         title: '', description: '', category: '', date: '',
@@ -120,28 +122,29 @@ const Dashboard = () => {
                 <hr style={{ zIndex: 5, margin: '30px' }} />
 
                 <h2 style={{ margin: '30px 5px' }}>Your Events</h2>
-                    <div className="event-grid" style={showAllMyEvents ? { maxHeight: '600px', overflowY: 'auto', paddingRight: '5px' } : {}}>
-                        {myEvents.length === 0 ? <p>You haven't created any events yet.</p> : visibleMyEvents.map(event => (
+                <div className="event-grid" style={showAllMyEvents ? { maxHeight: '600px', overflowY: 'auto', paddingRight: '5px' } : {}}>
+                    {myEvents.length === 0 ? <p>You haven't created any events yet.</p> : visibleMyEvents.map(event => (
                         <div key={event.id} className="card">
                             <div className="card-body">
                                 <h3>{event.title}</h3>
                                 <span className="date">📅 {new Date(event.event_date).toLocaleDateString()}</span>
                                 <p>{event.description ? event.description.substring(0, 80) + '...' : ''}</p>
-                                <div style={{ display: 'flex', gap: '10px', marginTop: '15px' }}>
+                                <div style={{ display: 'flex', gap: '10px', marginTop: '15px', flexWrap: 'wrap' }}>
                                     <Link to={`/events/${event.id}`} className="btn" style={{ flex: 1, textAlign: 'center', textDecoration: 'none' }}>View Details</Link>
+                                    <button onClick={() => setViewingAttendeesEventId(event.id)} className="btn" style={{ flex: 1, backgroundColor: '#36b9cc', color: '#fff' }}>Attendees</button>
                                     <button onClick={() => setScanningEventId(event.id)} className="btn" style={{ flex: 1, backgroundColor: '#f6c23e', color: '#fff' }}>Scan Tickets</button>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
-                    {myEvents.length > 4 && (
-                        <div style={{ textAlign: 'center', marginTop: '15px' }}>
-                            <button className="btn" onClick={() => setShowAllMyEvents(!showAllMyEvents)}>
-                                {showAllMyEvents ? 'See Less' : 'See More'}
-                            </button>
-                        </div>
-                    )}
+                {myEvents.length > 4 && (
+                    <div style={{ textAlign: 'center', marginTop: '15px' }}>
+                        <button className="btn" onClick={() => setShowAllMyEvents(!showAllMyEvents)}>
+                            {showAllMyEvents ? 'See Less' : 'See More'}
+                        </button>
+                    </div>
+                )}
             </div>
 
             {scanningEventId && (
@@ -150,6 +153,16 @@ const Dashboard = () => {
                         <button onClick={() => setScanningEventId(null)} style={{ position: 'absolute', top: '10px', right: '15px', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', zIndex: 10 }}>&times;</button>
                         <h3 style={{ marginBottom: '15px', color: '#4e73df', textAlign: 'center' }}>Scan Attendee Tickets</h3>
                         <OrganizerScanner eventId={scanningEventId} />
+                    </div>
+                </div>
+            )}
+
+            {viewingAttendeesEventId && (
+                <div className="loader-overlay" onClick={() => setViewingAttendeesEventId(null)}>
+                    <div onClick={e => e.stopPropagation()} style={{ background: '#fff', padding: '20px', borderRadius: '10px', position: 'relative', width: '90%', maxWidth: '700px', boxShadow: 'var(--shadow-md)' }}>
+                        <button onClick={() => setViewingAttendeesEventId(null)} style={{ position: 'absolute', top: '10px', right: '15px', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', zIndex: 10 }}>&times;</button>
+                        <h3 style={{ marginBottom: '15px', color: '#4e73df', textAlign: 'center' }}>Event Attendees</h3>
+                        <EventAttendees eventId={viewingAttendeesEventId} />
                     </div>
                 </div>
             )}
